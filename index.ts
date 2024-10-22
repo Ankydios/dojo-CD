@@ -1,6 +1,21 @@
 import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 
-const headers = new Headers();
+function handlePreFlightRequest(): Response {
+  return new Response("Preflight OK!", {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "content-type",
+    },
+  });
+}
+
+async function handler(req: Request): Promise<Response> {
+  if (req.method === "OPTIONS") {
+    return handlePreFlightRequest();
+  }
+
+  const headers = new Headers();
   headers.append("Content-Type", "application/json");
   headers.append("Access-Control-Allow-Origin", "*");
   headers.append("Access-Control-Allow-Headers", "content-type");
@@ -63,5 +78,6 @@ const headers = new Headers();
     });
   }
 }
+
 
 serve(handler);
