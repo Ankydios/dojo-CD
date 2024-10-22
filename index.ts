@@ -22,6 +22,8 @@ async function handler(req: Request): Promise<Response> {
   const word1 = requestBody.value;
   const word2 = "supelec";
 
+  console.log(`word1: ${word1}, word2: ${word2}`, requestBody, req);
+
   const similarityRequestBody = JSON.stringify({
     word1,
     word2,
