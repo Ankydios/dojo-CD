@@ -11,7 +11,6 @@ function handlePreFlightRequest(): Response {
 }
 
 async function handler(req: Request): Promise<Response> {
-  console.log(req)
   if (req.method == "OPTIONS") {
     return handlePreFlightRequest();
   }
@@ -23,13 +22,15 @@ async function handler(req: Request): Promise<Response> {
   const word1 = requestBody.value;
   const word2 = "supelec";
 
-  console.log(`word1: ${word1}, word2: ${word2}`, requestBody, req);
+  console.log(`word1: ${word1}, word2: ${word2}`);
 
   const similarityRequestBody = JSON.stringify({
     word1,
     word2,
   });
 
+  console.log(similarityRequestBody)
+  
   const requestOptions = {
     method: "POST",
     headers: headers,
