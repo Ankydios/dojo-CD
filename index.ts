@@ -17,6 +17,8 @@ async function handler(req: Request): Promise<Response> {
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
+  headers.append("Access-Control-Allow-Origin", "*");
+  headers.append("Access-Control-Allow-Headers", "content-type");
 
   const requestBody = await req.json();
   const word1 = requestBody.value;
