@@ -12,7 +12,7 @@ function handlePreFlightRequest(): Response {
 
 async function handler(req: Request): Promise<Response> {
   if (req.method == "OPTIONS") {
-    return handlePreFlightRequest();
+    handlePreFlightRequest();
   }
 
   const headers = new Headers();
