@@ -10,17 +10,21 @@ function handlePreFlightRequest(): Response {
   });
 }
 
-async function handler(_req: Request): Promise<Response> {
-  if (_req.method == "OPTIONS") {
-    handlePreFlightRequest();
+async function handler(req: Request): Promise<Response> {
+  if (req.method == "OPTIONS") {
+    return handlePreFlightRequest();
   }
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
+  const requestBody = await req.json();
+  const word1 = requestBody.value;
+  const word2 = "supelec";
+
   const similarityRequestBody = JSON.stringify({
-    word1: "centrale",
-    word2: "supelec",
+    word1,
+    word2,
   });
 
   const requestOptions = {
