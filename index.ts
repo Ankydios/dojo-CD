@@ -1,21 +1,6 @@
 import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 
-function handlePreFlightRequest(): Response {
-  return new Response("Preflight OK!", {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "content-type",
-    },
-  });
-}
-
-async function handler(req: Request): Promise<Response> {
-  if (req.method == "OPTIONS") {
-    handlePreFlightRequest();
-  }
-
-  const headers = new Headers();
+const headers = new Headers();
   headers.append("Content-Type", "application/json");
   headers.append("Access-Control-Allow-Origin", "*");
   headers.append("Access-Control-Allow-Headers", "content-type");
@@ -24,18 +9,18 @@ async function handler(req: Request): Promise<Response> {
   const word1 = requestBody.value;
   const word2 = "supelec";
 
-  console.log(`word1: ${word1}, word2: ${word2}`);
+  console.log(`word1: ${word1}, word2: ${word2}`, requestBody, req);
 
   const similarityRequestBody = JSON.stringify({
     word1,
     word2,
   });
 
-  console.log(similarityRequestBody)
-  
   const requestOptions = {
     method: "POST",
-    headers: headers,
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: similarityRequestBody,
     redirect: "follow",
   };
@@ -46,7 +31,7 @@ async function handler(req: Request): Promise<Response> {
     if (!response.ok) {
       console.error(`Error: ${response.statusText}`);
       return new Response(`Error: ${response.statusText}`, {
-        status: 200,
+        status: 500,
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -68,7 +53,14 @@ async function handler(req: Request): Promise<Response> {
     });
   } catch (error) {
     console.error("Fetch error:", error);
-    return new Response(`Error: ${error.message}`, { status: 500 });
+    return new Response(`Error: ${error.message}`, {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "content-type",
+      },
+    });
   }
 }
 
